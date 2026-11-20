@@ -85,3 +85,43 @@ abgeschlossen.
 Als Nächstes sollen echte X-COBOL-Dateien
 untersucht und die Erkennungsregeln weiter
 validiert werden.
+
+## Woche 9 – Vorbereitung der Fallstudie
+
+Für die Fallstudie wird ein kleiner, reproduzierbarer
+Datenausschnitt aus X-COBOL vorbereitet.
+
+### Datenauswahl
+
+Das Skript `prepare_sample.py` sucht nach Dateien
+mit COBOL-Dateiendungen und wählt maximal 15
+Dateien mit einem festen Zufalls-Seed aus.
+
+Die Auswahl wird in
+`results/selected_files.csv` gespeichert.
+
+Die Auswahl ist vorläufig. Vor der eigentlichen
+Analyse müssen die Dateiformate und die
+Zuordnung zu den Metadaten überprüft werden.
+
+### Metadaten
+
+Mit `inspect_metadata.py` werden die verfügbaren
+CSV-Dateien und ihre Spalten untersucht.
+
+Ziel ist die spätere Zuordnung von Quelldateien
+zu Repository, Commit-Anzahl und LOC.
+
+### Ausführung
+
+python prepare_sample.py
+python inspect_metadata.py
+python -m pytest -q
+
+### Nächste Schritte
+
+- Quelldateien mit Metadaten verknüpfen
+- Kompatible COBOL-Dateien identifizieren
+- Den Analysator auf dem Datenausschnitt ausführen
+- Warnungen und Warnungsdichte berechnen
+- Erste Ergebnisse manuell validieren

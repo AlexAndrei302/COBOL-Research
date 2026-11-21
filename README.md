@@ -125,3 +125,56 @@ python -m pytest -q
 - Den Analysator auf dem Datenausschnitt ausführen
 - Warnungen und Warnungsdichte berechnen
 - Erste Ergebnisse manuell validieren
+
+## Woche 9 – Experimenteller Proof of Concept
+
+### Erste Analyse realer COBOL-Dateien
+
+Das Skript `run_experiment.py` verwendet die zuvor
+ausgewählten Dateien aus dem X-COBOL-Datensatz.
+
+Für jede Datei werden folgende Informationen erfasst:
+
+- Dateipfad
+- angenommener COBOL-Quelltextformattyp
+- Anzahl der erkannten GO-TO-Vorkommen
+- Anzahl der erkannten ALTER-Vorkommen
+- Gesamtzahl der erkannten Warnungen
+- Anzahl der analysierten Codezeilen
+- vorläufige Warnungsdichte
+- eventuelle Analysefehler
+
+Die Ergebnisse werden in
+`results/experiment_results.csv` gespeichert.
+
+### Ausführung
+
+python run_experiment.py
+python -m pytest -q
+
+### Einschränkungen
+
+Der Analysator ist noch kein vollständiger COBOL-Parser.
+
+Die erste experimentelle Ausführung nimmt das
+Fixed-Format an. Die tatsächlichen Quelltextformate
+müssen noch geprüft werden.
+
+Die aktuelle LOC-Metrik basiert auf nichtleeren
+Zeilen nach der Vorverarbeitung und ist nicht
+identisch mit einer offiziellen CLOC-Messung.
+
+Erfolgreiche Ausführung bedeutet nicht automatisch,
+dass alle erkannten Warnungen korrekt sind.
+
+Die Zuordnung von Commits und offiziellen LOC-Werten
+aus X-COBOL sowie die manuelle Validierung sind
+noch ausstehend.
+
+### Nächste Schritte
+
+- Quelltextformate überprüfen
+- Dateimetadaten zuordnen
+- Ergebnisse manuell validieren
+- Ergebnisse interpretieren
+- Die vorläufige Fallstudie im L4-Bericht darstellen

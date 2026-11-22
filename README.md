@@ -201,3 +201,32 @@ results/zero_review.csv
 
 This validation helps identify possible missed
 warnings and limitations of the current analyzer.
+
+
+### Preliminary Experimental Results
+
+The initial experiment selected 15 COBOL files
+from the X-COBOL dataset.
+
+Results:
+- Successfully processed files: 15
+- Failed files: 0
+- Manually verified source formats in experiment: 2
+- Detected GO TO occurrences: 0
+- Detected ALTER occurrences: 0
+- Automated tests passed: 26
+
+Three files were additionally inspected manually
+for possible missed GO TO and ALTER instructions.
+
+No such instructions were found in these three files.
+
+These results are preliminary because the remaining
+source formats have not all been manually verified.
+
+The absence of detected warnings in this sample
+does not establish that the full X-COBOL dataset
+contains no such constructs.
+
+File-level commit metadata and verified LOC values
+still need to be integrated before statistical analysis.

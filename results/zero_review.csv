@@ -1,0 +1,16 @@
+file_path,source_format,format_verification,manual_format,manual_go_to,manual_alter,manual_verdict,notes
+data/X-COBOL/X-COBOL/COBOL_Files/abrignoli_COBSOFT/CSF00600.cpy,fixed,assumed,fixed,0,0,confirmed_zero,No GO TO or ALTER found during manual review
+data/X-COBOL/X-COBOL/COBOL_Files/abrignoli_COBSOFT/CSF02100.cpy,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/abrignoli_COBSOFT/CSF06000.cpy,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/bmcsoftware_vscode-ispw/TCPYB01.cpy,fixed,assumed, fixed,0,0,confirmed_zero,No GO TO or ALTER found during manual review
+data/X-COBOL/X-COBOL/COBOL_Files/bmcsoftware_vscode-ispw/TPROG04.cbl,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/brazilofmux_gnucobol/clinkages.cbl,free,manual, fixed,0,0,confirmed_zero,No GO TO or ALTER found during manual review
+data/X-COBOL/X-COBOL/COBOL_Files/cicsdev_cics-async-api-credit-card-application-example/GETNAME.cbl,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/debinix_openjensen/test-php-unlink.cbl,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/gbeine_COBOLUnit/CBU00006.cob,fixed,manual,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/gbeine_COBOLUnit/CBU00050.cob,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/gbeine_COBOLUnit/CTUC0001.cob,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/heddwch_WOPO/ENCASCII.COB,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/IBM_zOS-Client-Web-Enablement-Toolkit/HWTHXCB1.cbl,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/shamrice_COBOL-RSS-Reader/rss_reader_configuration.cbl,fixed,assumed,,,,,
+data/X-COBOL/X-COBOL/COBOL_Files/z390development_z390/TESTCMP2.CBL,fixed,assumed,,,,,

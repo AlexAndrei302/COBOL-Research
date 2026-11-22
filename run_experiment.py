@@ -5,11 +5,35 @@ import csv
 from analyzer import (
     analyze_file,
     read_cobol_file,
-    extract_code_lines
+    extract_code_lines,
 )
 
 INPUT_FILE = Path("results/selected_files.csv")
 OUTPUT_FILE = Path("results/experiment_results.csv")
+
+# Formats confirmed manually.
+# Other selected files still require verification.
+FREE_FORMAT_FILES = {
+    "brazilofmux_gnucobol/clinkages.cbl",
+}
+
+FIXED_FORMAT_FILES = {
+    "gbeine_COBOLUnit/CBU00006.cob",
+}
+
+
+def get_source_format(file_path):
+    path = Path(file_path).as_posix()
+
+    for known_path in FREE_FORMAT_FILES:
+        if path.endswith(known_path):
+            return "free", "manual"
+
+    for known_path in FIXED_FORMAT_FILES:
+        if path.endswith(known_path):
+            return "fixed", "manual"
+
+    return "fixed", "assumed"
 
 
 def calculate_density(warnings, loc):
@@ -19,12 +43,15 @@ def calculate_density(warnings, loc):
     return round(warnings / loc * 1000, 2)
 
 
-def analyze_selected_file(file_path, source_format="fixed"):
+def analyze_selected_file(
+    file_path, source_format="fixed"
+):
     path = Path(file_path)
 
     result = {
         "file_path": path.as_posix(),
         "source_format": source_format,
+        "format_verification": "not_verified",
         "status": "error",
         "source_lines": "",
         "analyzed_code_lines": "",
@@ -32,35 +59,26 @@ def analyze_selected_file(file_path, source_format="fixed"):
         "alter": "",
         "total_warnings": "",
         "warning_density": "",
-        "error": ""
+        "error": "",
     }
 
     try:
         source = read_cobol_file(path)
 
-        code_lines = extract_code_lines(
-            source,
-            source_format=source_format
+        lines = extract_code_lines(
+            source, source_format=source_format
         )
 
         analyzed_loc = sum(
-            1 for line in code_lines
-            if line.strip()
+            1 for line in lines if line.strip()
         )
 
         warnings = analyze_file(
-            path,
-            source_format=source_format
+            path, source_format=source_format
         )
 
-        total_warnings = (
-            warnings["go_to"] + warnings["alter"]
-        )
-
-        density = calculate_density(
-            total_warnings,
-            analyzed_loc
-        )
+        total = warnings["go_to"] + warnings["alter"]
+        density = calculate_density(total, analyzed_loc)
 
         result.update({
             "status": "ok",
@@ -68,10 +86,10 @@ def analyze_selected_file(file_path, source_format="fixed"):
             "analyzed_code_lines": analyzed_loc,
             "go_to": warnings["go_to"],
             "alter": warnings["alter"],
-            "total_warnings": total_warnings,
+            "total_warnings": total,
             "warning_density": (
                 density if density is not None else ""
-            )
+            ),
         })
 
     except (OSError, UnicodeError, ValueError) as error:
@@ -93,7 +111,7 @@ def read_selected_files():
 
         if "file_path" not in (reader.fieldnames or []):
             raise ValueError(
-                "CSV must contain a file_path column"
+                "Missing file_path column"
             )
 
         return [
@@ -111,6 +129,7 @@ def save_results(results):
     fieldnames = [
         "file_path",
         "source_format",
+        "format_verification",
         "status",
         "source_lines",
         "analyzed_code_lines",
@@ -118,7 +137,7 @@ def save_results(results):
         "alter",
         "total_warnings",
         "warning_density",
-        "error"
+        "error",
     ]
 
     with OUTPUT_FILE.open(
@@ -127,42 +146,46 @@ def save_results(results):
         writer = csv.DictWriter(
             file, fieldnames=fieldnames
         )
-
         writer.writeheader()
         writer.writerows(results)
 
 
 def main():
     selected_files = read_selected_files()
+    results = []
 
     print("X-COBOL Experimental Analysis")
     print("-----------------------------")
     print(f"Selected files: {len(selected_files)}")
     print()
 
-    results = []
-
     for file_path in selected_files:
-        result = analyze_selected_file(file_path)
+        source_format, verification = get_source_format(
+            file_path
+        )
+
+        result = analyze_selected_file(
+            file_path, source_format
+        )
+
+        result["format_verification"] = verification
         results.append(result)
 
         print(f"File: {Path(file_path).name}")
+        print(f"Format: {source_format}")
+        print(f"Format verification: {verification}")
         print(f"Status: {result['status']}")
 
         if result["status"] == "ok":
             print(f"GO TO: {result['go_to']}")
             print(f"ALTER: {result['alter']}")
-            print(
-                "Warnings: "
-                f"{result['total_warnings']}"
-            )
+            print(f"Warnings: {result['total_warnings']}")
             print(
                 "Analyzed code lines: "
                 f"{result['analyzed_code_lines']}"
             )
             print(
-                "Density: "
-                f"{result['warning_density']}"
+                f"Density: {result['warning_density']}"
             )
         else:
             print(f"Error: {result['error']}")
@@ -172,16 +195,21 @@ def main():
     save_results(results)
 
     successful = sum(
-        result["status"] == "ok"
-        for result in results
+        row["status"] == "ok" for row in results
     )
-
     failed = len(results) - successful
+
+    verified = sum(
+        row["status"] == "ok"
+        and row["format_verification"] == "manual"
+        for row in results
+    )
 
     print("Experiment Summary")
     print("------------------")
     print(f"Successfully analyzed: {successful}")
     print(f"Failed: {failed}")
+    print(f"Manually verified formats: {verified}")
     print(f"Results saved to: {OUTPUT_FILE}")
 
 

@@ -178,3 +178,26 @@ noch ausstehend.
 - Ergebnisse manuell validieren
 - Ergebnisse interpretieren
 - Die vorläufige Fallstudie im L4-Bericht darstellen
+
+
+### Manual Validation Results
+
+For the initial validation, three COBOL files from
+different repositories were manually inspected:
+
+- CSF00600.cpy
+- TCPYB01.cpy
+- clinkages.cbl
+
+The manual review included:
+- Checking the COBOL source format (fixed or free)
+- Searching for GO TO and ALTER instructions
+- Checking whether occurrences appear in executable
+  code, comments, or string literals
+- Comparing the findings with the analyzer results
+
+The review results are documented in:
+results/zero_review.csv
+
+This validation helps identify possible missed
+warnings and limitations of the current analyzer.
